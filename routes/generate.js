@@ -5,22 +5,19 @@ import { callDeepSeek } from "../services/deepseek.js";
 const router = Router();
 
 const RequestSchema = z.object({
-  bulletPoints: z
-    .string()
-    .min(5, "Please provide bullet points (min 5 chars)."),
+  finding: z.string().min(5, "Please provide an audit finding (min 5 chars)."),
 });
 
 const ResponseSchema = z.object({
-  issue: z.string(),
-  risk: z.string(),
-  recommendation: z.string(),
-  root_cause: z.string(),
-  management_response: z.string(),
+  issues: z.string(),
+  risks: z.string(),
+  recommendations: z.string(),
+  root_causes: z.string(),
 });
 
 router.post("/generate-report", async (req, res) => {
   try {
-    const { bulletPoints } = RequestSchema.parse(req.body);
+    const { finding } = RequestSchema.parse(req.body);
 
     const apiKey = process.env.DEEPSEEK_API_KEY;
     const baseUrl = process.env.DEEPSEEK_BASE_URL;
@@ -36,7 +33,7 @@ router.post("/generate-report", async (req, res) => {
       baseUrl,
       apiKey,
       model,
-      bulletPoints,
+      finding,
     });
 
     if (result.json) {

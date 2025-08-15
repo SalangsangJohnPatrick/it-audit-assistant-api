@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 
-export async function callDeepSeek({ baseUrl, apiKey, model, bulletPoints }) {
+export async function callDeepSeek({ baseUrl, apiKey, model, finding }) {
   const response = await fetch(`${baseUrl}/v1/chat/completions`, {
     method: "POST",
     headers: {
@@ -12,12 +12,25 @@ export async function callDeepSeek({ baseUrl, apiKey, model, bulletPoints }) {
       messages: [
         {
           role: "system",
-          content:
-            "You are an AI assistant that generates IT audit reports. Respond ONLY in strict JSON with the keys: issue, risk, recommendation, root_cause, management_response.",
+          content: `
+  You are an experienced IT Audit professional with deep knowledge of IT governance, risk management, and control frameworks (e.g., COBIT, NIST, ISO 27001).
+
+  Your task is to analyze IT audit findings and generate a structured IT audit report in strict JSON format.
+
+  ONLY respond in JSON with the following keys:
+  - "issues": A paragraph of concise summary of the identified issues.
+  - "risks": A paragraph of risks or potential impacts associated with the issues.
+  - "root_causes": A paragraph of the underlying cause of the issues.
+  - "recommendations": A paragraph of specific, actionable advices to remediate or mitigate the issues.
+
+  Ensure the output is properly formatted as valid JSON.
+          `.trim(),
         },
         {
           role: "user",
-          content: `Generate the IT audit report based on these bullet points: ${bulletPoints}`,
+          content: `
+  I am conducting an IT audit for a digitally transforming rural bank. Based on the following audit finding, generate an IT audit report in JSON format:\n\n${finding}
+          `.trim(),
         },
       ],
       temperature: 0.3,
@@ -31,6 +44,8 @@ export async function callDeepSeek({ baseUrl, apiKey, model, bulletPoints }) {
     data?.output_text ||
     data?.text ||
     "";
+
+  console.log("DeepSeek response:", content);
 
   if (!content.trim()) {
     throw new Error("No content in DeepSeek response.");
