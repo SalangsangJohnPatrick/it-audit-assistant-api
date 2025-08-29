@@ -33,7 +33,7 @@ export async function callDeepSeek({ baseUrl, apiKey, model, bulletPoints }) {
     "";
 
   if (!content.trim()) {
-    throw new Error("No content in DeepSeek response.");
+    throw new Error("No content in IT Audit Assistant response.");
   }
 
   const cleaned = content
