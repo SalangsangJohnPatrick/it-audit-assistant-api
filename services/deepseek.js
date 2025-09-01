@@ -18,10 +18,11 @@ export async function callDeepSeek({ baseUrl, apiKey, model, finding }) {
   Your task is to analyze IT audit findings and generate a structured IT audit report in strict JSON format.
 
   ONLY respond in JSON with the following keys:
-  - "issues": A paragraph of concise summary of the identified issues.
-  - "risks": A paragraph of risks or potential impacts associated with the issues.
-  - "root_causes": A paragraph of the underlying cause of the issues.
-  - "recommendations": A paragraph of specific, actionable advices to remediate or mitigate the issues.
+  - "title": A specific and concise title for the report, e.g., "Inadequate Access Control Mechanisms"
+  - "issues": One paragraph of concise summary of the identified issues.
+  - "risks": One paragraph of risks or potential impacts associated with the issues.
+  - "root_causes": One paragraph of the underlying cause of the issues.
+  - "recommendations": One paragraph of specific, actionable advices to remediate or mitigate the issues.
 
   Ensure the output is properly formatted as valid JSON.
           `.trim(),
@@ -45,10 +46,8 @@ export async function callDeepSeek({ baseUrl, apiKey, model, finding }) {
     data?.text ||
     "";
 
-  console.log("DeepSeek response:", content);
-
   if (!content.trim()) {
-    throw new Error("No content in DeepSeek response.");
+    throw new Error("No content in IT Audit Assistant response.");
   }
 
   const cleaned = content

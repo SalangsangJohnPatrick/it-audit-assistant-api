@@ -9,6 +9,7 @@ const RequestSchema = z.object({
 });
 
 const ResponseSchema = z.object({
+  title: z.string(),
   issues: z.string(),
   risks: z.string(),
   recommendations: z.string(),
