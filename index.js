@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { apiLimiter } from "./middleware/rateLimit.js";
+import { apiLimiter } from "./middleware/rate-limit.js";
 import generateRoute from "./routes/generate.js";
 
 dotenv.config();

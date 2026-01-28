@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 
-export async function callDeepSeek({ baseUrl, apiKey, model, finding }) {
-  const response = await fetch(`${baseUrl}/v1/chat/completions`, {
+export async function runModel({ baseUrl, apiKey, model, finding }) {
+  const response = await fetch(`${baseUrl}`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${apiKey}`,

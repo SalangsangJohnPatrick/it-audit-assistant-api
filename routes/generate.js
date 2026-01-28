@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { z } from "zod";
-import { callDeepSeek } from "../services/deepseek.js";
+import { runModel } from "../services/api-service.js";
 
 const router = Router();
 
@@ -20,17 +20,15 @@ router.post("/generate-report", async (req, res) => {
   try {
     const { finding } = RequestSchema.parse(req.body);
 
-    const apiKey = process.env.DEEPSEEK_API_KEY;
-    const baseUrl = process.env.DEEPSEEK_BASE_URL;
-    const model = process.env.DEEPSEEK_MODEL;
+    const apiKey = process.env.API_KEY;
+    const baseUrl = process.env.BASE_URL;
+    const model = process.env.MODEL;
 
     if (!apiKey) {
-      return res
-        .status(500)
-        .json({ error: "Missing DEEPSEEK_API_KEY on server." });
+      return res.status(500).json({ error: "Missing API_KEY on server." });
     }
 
-    const result = await callDeepSeek({
+    const result = await runModel({
       baseUrl,
       apiKey,
       model,
@@ -38,7 +36,6 @@ router.post("/generate-report", async (req, res) => {
     });
 
     if (result.json) {
-      // Validate shape
       const validated = ResponseSchema.parse(result.json);
       return res.json({
         ok: true,
@@ -46,7 +43,6 @@ router.post("/generate-report", async (req, res) => {
         raw: result.raw,
       });
     } else {
-      // Return raw to be transparent
       return res.json({
         ok: true,
         report: null,
